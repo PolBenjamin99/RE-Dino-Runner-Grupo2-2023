@@ -8,6 +8,7 @@ class Dinosaur(Sprite):
     X_POS = 80
     Y_POS = 310
     JUMP_VEL = 8.5
+    DINO_DUCK_RECT_Y = 340
     
     def __init__(self):
         self.image = RUNNING[0]
@@ -46,7 +47,7 @@ class Dinosaur(Sprite):
         
 
     def draw(self, screen):
-        screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
+        screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y)) #dibuja el sprite del dinosaurio en el bg
 
     def run(self):
         self.dino_rect.y = self.Y_POS
@@ -59,8 +60,8 @@ class Dinosaur(Sprite):
     def jump(self):
         self.image = JUMPING
         if self.dino_jump == True:
-            self.dino_rect.y = self.dino_rect.y - self.jump_vel * 4
-            self.jump_vel = self.jump_vel - 0.8
+            self.dino_rect.y -= self.jump_vel * 4
+            self.jump_vel -= 0.8
 
         if self.jump_vel < -self.JUMP_VEL:
             self.dino_rect.y = self.Y_POS
@@ -69,7 +70,7 @@ class Dinosaur(Sprite):
 
     def duck(self):
         self.image = DUCKING[0]
-        self.dino_rect.y = 340
+        self.dino_rect.y = self.DINO_DUCK_RECT_Y
         if self.step_index < 5:
             self.image = DUCKING[0]
         else:

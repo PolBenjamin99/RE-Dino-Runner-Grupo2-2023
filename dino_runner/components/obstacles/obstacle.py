@@ -20,7 +20,7 @@ class Obstacle(Sprite):
             if self.fly_index >= 10:  
                 self.fly_index = 0
 
-        if self.rect.x < -SCREEN_WIDTH:
+        if self.rect.x < -self.rect.width:
             obstacles.pop()
 
     def draw(self, screen):

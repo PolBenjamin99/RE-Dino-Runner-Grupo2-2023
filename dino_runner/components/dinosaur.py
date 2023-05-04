@@ -1,6 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DEFAULT_TYPE,JUMPING_SHIELD,DUCKING_SHIELD, RUNNING_SHIELD
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DEFAULT_TYPE,JUMPING_SHIELD,DUCKING_SHIELD, RUNNING_SHIELD, HAMMER, SCREEN_WIDTH
+from dino_runner.components.dino_hammer import DinoHammer
 
 
 class Dinosaur(Sprite):
@@ -21,8 +22,12 @@ class Dinosaur(Sprite):
         self.jump_vel = self.JUMP_VEL
         self.type = DEFAULT_TYPE
         self.setup_state_booleans()
+        self.hammer = 0
+        self.dino_hammer = DinoHammer()
 
-    def update(self, user_input):
+    def update(self, user_input,game_speed):
+        if self.hammer > 0:
+            self.dino_hammer.update(game_speed)
         if self.dino_jump:
             self.jump()
         if self.dino_run:
@@ -45,9 +50,15 @@ class Dinosaur(Sprite):
 
         if self.step_index >= 10:
             self.step_index = 0
+
+        if user_input[pygame.K_SPACE] and not self.dino_hammer.hammer_enable:
+            if self.hammer > 0:
+                self.dino_hammer.hammer_enable = True
         
     def draw(self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y)) #dibuja el sprite del dinosaurio en el bg
+        if self.hammer > 0:
+            self.dino_hammer.draw(screen)
 
     def run(self):
         if self.shield:
@@ -117,6 +128,19 @@ class Dinosaur(Sprite):
                     screen.blit(text, textRect)
             else:
                 self.shield = False
-                    
-                 
+    
+    def check_hammer(self, screen):
+        if self.hammer >= 0:
+            font = pygame.font.Font("freesansbold.ttf", 18)
+            text = font.render(f" x {self.hammer}", True, (0, 0, 0))
+            textRect = text.get_rect()
+            textRect.center = (60, 37)
+            screen.blit(HAMMER, (3,10))
+            screen.blit(text, textRect)
+        if self.dino_hammer.hammer_rect.x > SCREEN_WIDTH:
+            self.hammer -= 1
 
+
+
+                    
+    

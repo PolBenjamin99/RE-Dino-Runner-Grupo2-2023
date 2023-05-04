@@ -31,8 +31,14 @@ class ObstacleManager:
                     game.playing = False
                     game.death_count +=1
                     break
-                else:
+                elif game.player.shield:
                     self.obstacles.remove(obstacle)
+            if game.player.dino_hammer.hammer_rect.colliderect(obstacle.rect):
+                if game.player.dino_hammer.hammer_enable:
+                    self.obstacles.remove(obstacle)
+                    game.player.dino_hammer.hammer_enable = False
+                    game.player.dino_hammer.hammer_rect.x = 95
+                    game.player.hammer -= 1
 
     def reset_obstacles(self):
         self.obstacles = []

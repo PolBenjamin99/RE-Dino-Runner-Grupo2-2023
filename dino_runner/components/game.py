@@ -7,6 +7,7 @@ from dino_runner.components.obstacles.obstacles_manager import ObstacleManager
 from dino_runner.components import text_utils
 from dino_runner.components.power_up.power_up_manager import PowerUpManager
 
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -32,6 +33,7 @@ class Game:
         self.power_up_manager.reset_power_ups(self.points)
         self.game_speed = 20
         self.points = 0
+        self.player.hammer = 0
         self.playing = True
         while self.playing:
             self.events()
@@ -91,7 +93,7 @@ class Game:
 
     def update(self):
         user_input = pygame.key.get_pressed()
-        self.player.update(user_input)
+        self.player.update(user_input, self.game_speed)
         self.obstacle_manager.update(self)
         self.power_up_manager.update(self.points, self.game_speed, self.player)
 
@@ -126,4 +128,5 @@ class Game:
             self.game_speed += 1
         text, text_rect = text_utils.get_score_element(str(self.points))
         self.player.chek_invincibility(self.screen)
+        self.player.check_hammer(self.screen)
         self.screen.blit(text, text_rect)

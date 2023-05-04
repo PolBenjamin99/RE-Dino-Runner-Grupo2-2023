@@ -11,7 +11,7 @@ class Obstacle(Sprite):
     def update(self, game_speed, obstacles):
         self.rect.x -= game_speed
         
-        if self.image == BIRD:  
+        if self.image == BIRD:
             self.fly_index += 1
             if self.fly_index < 5:
                 self.type = 0

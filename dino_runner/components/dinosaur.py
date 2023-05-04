@@ -1,6 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DEFAULT_TYPE
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DEFAULT_TYPE,JUMPING_SHIELD,DUCKING_SHIELD, RUNNING_SHIELD
+
 
 class Dinosaur(Sprite):
     X_POS = 80
@@ -49,15 +50,28 @@ class Dinosaur(Sprite):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y)) #dibuja el sprite del dinosaurio en el bg
 
     def run(self):
+        if self.shield:
+            self.image = RUNNING_SHIELD[0]
+        else:
+            self.image = RUNNING[0]
         self.dino_rect.y = self.Y_POS
         if self.step_index < 5:
-            self.image = RUNNING[0]
+            if self.shield:
+                self.image = RUNNING_SHIELD[0]
+            else:
+                self.image = RUNNING[0]
         else:
-            self.image = RUNNING[1]
+            if self.shield:
+                self.image = RUNNING_SHIELD[1] 
+            else:
+                self.image = RUNNING[1]
         self.step_index +=1
 
     def jump(self):
-        self.image = JUMPING
+        if self.shield:
+            self.image = JUMPING_SHIELD
+        else:
+            self.image = JUMPING
         if self.dino_jump == True:
             self.dino_rect.y -= self.jump_vel * 4
             self.jump_vel -= 0.8
@@ -68,12 +82,21 @@ class Dinosaur(Sprite):
             self.jump_vel = self.JUMP_VEL
 
     def duck(self):
-        self.image = DUCKING[0]
+        if self.shield:
+            self.image = DUCKING_SHIELD[0]              
+        else:
+            self.image = DUCKING[0]
         self.dino_rect.y = self.DINO_DUCK_RECT_Y
         if self.step_index < 5:
-            self.image = DUCKING[0]
+            if self.shield:
+                self.image = DUCKING_SHIELD[0]    
+            else:
+                self.image = DUCKING[0]
         else:
-            self.image = DUCKING[1]
+            if self.shield:
+                self.image = DUCKING_SHIELD[1]
+            else:
+                self.image = DUCKING[1]
         self.step_index +=1
 
     def setup_state_booleans(self):

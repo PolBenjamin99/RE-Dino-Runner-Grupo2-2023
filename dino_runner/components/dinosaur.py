@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DEFAULT_TYPE
 
 class Dinosaur(Sprite):
     X_POS = 80
@@ -10,7 +10,7 @@ class Dinosaur(Sprite):
     
     def __init__(self):
         self.image = RUNNING[0]
-        self.dino_rect = self.image.get_rect() #obtiene las posiciones del sprite o hitbox
+        self.dino_rect = self.image.get_rect() 
         self.dino_rect.x = self.X_POS   
         self.dino_rect.y = self.Y_POS
         self.step_index = 0    
@@ -18,6 +18,8 @@ class Dinosaur(Sprite):
         self.dino_jump = False
         self.dino_duck = False
         self.jump_vel = self.JUMP_VEL
+        self.type = DEFAULT_TYPE
+        self.setup_state_booleans()
 
     def update(self, user_input):
         if self.dino_jump:
@@ -73,3 +75,25 @@ class Dinosaur(Sprite):
         else:
             self.image = DUCKING[1]
         self.step_index +=1
+
+    def setup_state_booleans(self):
+        self.shield = False
+        self.show_text = False
+        self.shield_time_up = 0
+        self.has_powerup = False
+
+    def chek_invincibility(self, screen):
+        if self.shield:
+            time_to_show = round((self.shield_time_up - pygame.time.get_ticks())/1000,2)
+            if time_to_show >= 0:
+                if self.show_text:
+                    font = pygame.font.Font("freesansbold.ttf", 18)
+                    text = font.render(f"Shield enbable for {time_to_show}", True, (0,0,0))
+                    textRect = text.get_rect()
+                    textRect.center = (500, 40)
+                    screen.blit(text, textRect)
+            else:
+                self.shield = False
+                    
+                 
+

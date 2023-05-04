@@ -6,11 +6,9 @@ black_color = (0,0,0)
 
 def get_score_element(points):
     font = pygame.font.Font(FONT_STYLE, 22)
-    #va a ser la renderizacion de todo lo que sea eso en img
-    text = font.render("Points: ", + points, True, black_color) 
-    #text se convierte en una imagen
+    
+    text = font.render("Points: " + points, True, black_color) 
     text_rect = text.get_rect()
-    #centramos la imagen en las coord que eligamos
     text_rect.center = (1000, 50)
     return text, text_rect
 

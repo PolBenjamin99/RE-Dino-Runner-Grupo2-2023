@@ -1,6 +1,7 @@
 import pygame
+import random
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, RUNNING
+from dino_runner.utils.constants import CLOUD,BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, RUNNING
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacles_manager import ObstacleManager
 from dino_runner.components import text_utils
@@ -17,6 +18,8 @@ class Game:
         self.game_speed = 20
         self.x_pos_bg = 0
         self.y_pos_bg = 380
+        self.cloud_x = SCREEN_WIDTH
+        self.cloud_y = 140
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
@@ -103,6 +106,11 @@ class Game:
         pygame.display.flip()
 
     def draw_background(self):
+        self.screen.blit(CLOUD, (self.cloud_x, self.cloud_y))
+        if self.cloud_x < 0:   
+            self.cloud_x = SCREEN_WIDTH
+            self.cloud_y = random.randint(30,200)
+        self.cloud_x -= self.game_speed    
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
         self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
@@ -110,6 +118,7 @@ class Game:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
+        
 
     def score(self):
         self.points += 1
